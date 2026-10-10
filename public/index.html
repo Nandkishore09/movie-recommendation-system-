@@ -27,6 +27,7 @@
     <button class="nav-pill active" data-feed="trending">🔥 Trending</button>
     <button class="nav-pill" data-feed="popular">⭐ Popular</button>
     <button class="nav-pill" data-feed="top_rated">🏆 Top Rated</button>
+    <button class="nav-pill" data-feed="favorites">❤️ Favorites <span class="nav-count" id="favCount">0</span></button>
   </nav>
 </header>
 
@@ -46,13 +47,14 @@
 <!-- ============ FEED ============ -->
 <section id="feedSection" class="feed-section">
   <div class="feed-header">
-    <h2><span class="feed-icon">🔥</span> <span id="feedTitle">Trending Now</span> <span id="feedCount" class="count-pill">— movies</span></h2>
+    <h2><span id="feedTitle">Trending Now</span> <span id="feedCount" class="count-pill">— movies</span></h2>
     <div class="feed-tabs">
       <button class="tab-pill active" data-feed="trending">🔥 Trending</button>
       <button class="tab-pill" data-feed="popular">📈 Popular</button>
       <button class="tab-pill" data-feed="top_rated">🏅 Top Rated</button>
       <button class="tab-pill" data-feed="now_playing">▶️ Now Playing</button>
       <button class="tab-pill" data-feed="upcoming">📅 Upcoming</button>
+      <button class="tab-pill" data-feed="favorites">❤️ Favorites</button>
     </div>
   </div>
 

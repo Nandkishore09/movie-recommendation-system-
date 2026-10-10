@@ -411,3 +411,65 @@ a{ color:inherit; }
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
+
+/* ================= FAVORITES ================= */
+.fav-btn{
+  position:absolute; top:10px; left:10px;
+  width:34px; height:34px;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(10,10,13,0.85);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:50%;
+  color:#fff;
+  z-index:2;
+  transition: transform .12s, background .15s;
+}
+.fav-btn svg{ fill:none; stroke: currentColor; transition: fill .15s, stroke .15s; }
+.fav-btn:hover{ transform: scale(1.1); background: rgba(230,57,70,0.35); }
+.fav-btn.active svg{ fill: var(--red); stroke: var(--red); }
+
+.fav-modal-btn{
+  margin-top:14px;
+  padding:9px 18px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:0.85rem;
+  background: rgba(255,255,255,0.07);
+  border:1px solid var(--line);
+  color: var(--text);
+  transition: all .15s;
+}
+.fav-modal-btn:hover{ background: rgba(255,255,255,0.12); }
+.fav-modal-btn.active{
+  background: rgba(230,57,70,0.18);
+  border-color: rgba(230,57,70,0.5);
+  color: var(--red);
+}
+
+.nav-count{
+  background: rgba(255,255,255,0.14);
+  border-radius:999px;
+  padding:1px 8px;
+  font-size:0.72rem;
+  margin-left:2px;
+}
+.nav-pill.active .nav-count{ background: rgba(0,0,0,0.25); }
+
+.toast{
+  position:fixed;
+  bottom:28px; left:50%;
+  transform: translate(-50%, 20px);
+  background: var(--bg-card);
+  border:1px solid var(--line);
+  color: var(--text);
+  padding:11px 20px;
+  border-radius:999px;
+  font-size:0.88rem;
+  font-weight:600;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .2s, transform .2s;
+  z-index:200;
+}
+.toast.show{ opacity:1; transform: translate(-50%, 0); }

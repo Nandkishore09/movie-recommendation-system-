@@ -12,6 +12,7 @@ const FEED_LABELS = {
   top_rated: "🏅 Top Rated Movies",
   now_playing: "▶️ Now Playing",
   upcoming: "📅 Upcoming Releases",
+  favorites: "❤️ My Favorites",
 };
 
 // ===================== DOM =====================
@@ -36,6 +37,84 @@ function escapeHTML(str = ""){
   }[m]));
 }
 
+// ===================== FAVORITES (saved in this browser) =====================
+const FAV_KEY = "wtw_favorites";
+const movieCache = new Map();
+
+function slimMovie(m){
+  return {
+    id: m.id,
+    title: m.title,
+    poster_path: m.poster_path,
+    vote_average: m.vote_average,
+    release_date: m.release_date,
+  };
+}
+function getFavorites(){
+  try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; }
+  catch { return []; }
+}
+function saveFavorites(list){
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); } catch {}
+}
+function isFavorite(id){
+  return getFavorites().some(m => String(m.id) === String(id));
+}
+// returns true if the movie is now a favorite, false if it was removed
+function toggleFavorite(movie){
+  const list = getFavorites();
+  const idx = list.findIndex(m => String(m.id) === String(movie.id));
+  let nowFav;
+  if (idx >= 0){ list.splice(idx, 1); nowFav = false; }
+  else { list.unshift(slimMovie(movie)); nowFav = true; }
+  saveFavorites(list);
+  updateFavCount();
+  syncHearts();
+  showToast(nowFav ? "❤️ Added to favorites" : "Removed from favorites");
+  return nowFav;
+}
+function updateFavCount(){
+  const el = document.getElementById("favCount");
+  if (el) el.textContent = getFavorites().length;
+}
+function syncHearts(){
+  document.querySelectorAll(".fav-btn").forEach(btn => {
+    btn.classList.toggle("active", isFavorite(btn.dataset.id));
+  });
+}
+function renderModalFavBtn(){
+  const btn = document.getElementById("modalFavBtn");
+  if (!btn) return;
+  const fav = isFavorite(btn.dataset.id);
+  btn.classList.toggle("active", fav);
+  btn.textContent = fav ? "♥ In Favorites" : "♡ Add to Favorites";
+}
+let toastTimer = null;
+function showToast(msg){
+  let t = document.getElementById("toast");
+  if (!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.className = "toast";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function renderFavorites(){
+  const favs = getFavorites();
+  feedCount.textContent = `— ${favs.length} saved`;
+  loadMoreBtn.parentElement.classList.add("hidden");
+  if (favs.length === 0){
+    movieGrid.innerHTML = `<div class="empty-state">💔 Abhi koi favorite nahi hai.<br>Kisi bhi movie card pe ❤️ dabao, wo yahan save ho jayegi.</div>`;
+    return;
+  }
+  movieGrid.innerHTML = favs.map(movieCardHTML).join("");
+}
+
 async function apiGet(path){
   const res = await fetch(path);
   if (!res.ok) throw new Error(`Request failed: ${res.status}`);
@@ -54,10 +133,15 @@ function renderSkeletons(count = 10){
 
 function movieCardHTML(movie){
   const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
+  const fav = isFavorite(movie.id);
+  movieCache.set(String(movie.id), slimMovie(movie));
   return `
     <div class="movie-card" data-id="${movie.id}">
       <div class="poster-wrap">
         <img loading="lazy" src="${posterUrl(movie.poster_path)}" alt="${escapeHTML(movie.title)}">
+        <button class="fav-btn ${fav ? "active" : ""}" data-id="${movie.id}" aria-label="Toggle favorite" title="Add to favorites">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.7 4.5 6.4 4.5c2 0 3.6 1.1 4.6 2.7h2c1-1.6 2.6-2.7 4.6-2.7 3.7 0 5.5 3.9 4 7.3C19.5 16.4 12 21 12 21z" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
         <span class="rating-badge">⭐ ${rating}</span>
       </div>
       <div class="card-info">
@@ -67,17 +151,27 @@ function movieCardHTML(movie){
     </div>`;
 }
 
-function attachCardListeners(){
-  movieGrid.querySelectorAll(".movie-card").forEach(card => {
-    card.addEventListener("click", () => openMovieModal(card.dataset.id));
-  });
-}
+// One delegated listener for the whole grid (heart button + card click)
+movieGrid.addEventListener("click", (e) => {
+  const heart = e.target.closest(".fav-btn");
+  if (heart){
+    e.stopPropagation();
+    const movie = movieCache.get(String(heart.dataset.id));
+    if (!movie) return;
+    toggleFavorite(movie);
+    if (currentFeed === "favorites") renderFavorites();
+    return;
+  }
+  const card = e.target.closest(".movie-card");
+  if (card) openMovieModal(card.dataset.id);
+});
 
 // ===================== LOAD FEED =====================
 async function loadFeed(feed, page = 1){
   currentFeed = feed;
   currentPage = page;
   feedTitle.textContent = FEED_LABELS[feed];
+  if (feed === "favorites"){ renderFavorites(); return; }
   if (page === 1) renderSkeletons();
 
   try{
@@ -92,7 +186,6 @@ async function loadFeed(feed, page = 1){
       return;
     }
     movieGrid.insertAdjacentHTML("beforeend", data.results.map(movieCardHTML).join(""));
-    attachCardListeners();
     loadMoreBtn.parentElement.classList.toggle("hidden", currentPage >= totalPages);
   } catch(err){
     console.error(err);
@@ -196,6 +289,7 @@ async function openMovieModal(id){
               ${details.runtime ? `<span class="badge">${details.runtime} min</span>` : ""}
               ${(details.genres || []).map(g => `<span class="badge">${escapeHTML(g.name)}</span>`).join("")}
             </div>
+            <button id="modalFavBtn" class="fav-modal-btn" data-id="${details.id}"></button>
           </div>
         </div>
 
@@ -227,6 +321,13 @@ async function openMovieModal(id){
     modalBody.querySelectorAll(".similar-card").forEach(card => {
       card.addEventListener("click", () => openMovieModal(card.dataset.id));
     });
+
+    renderModalFavBtn();
+    document.getElementById("modalFavBtn").addEventListener("click", () => {
+      toggleFavorite(details);
+      renderModalFavBtn();
+      if (currentFeed === "favorites") renderFavorites();
+    });
   } catch(err){
     console.error(err);
     modalBody.innerHTML = `<div style="padding:60px;text-align:center;color:#a3a1ab;">Couldn't load movie details.</div>`;
@@ -242,4 +343,5 @@ movieModal.addEventListener("click", (e) => { if (e.target === movieModal) close
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
 // ===================== INIT =====================
+updateFavCount();
 loadFeed(currentFeed, 1);
