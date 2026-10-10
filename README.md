@@ -1,8 +1,8 @@
-# WhatToWatch (Backend version)
-
+# WhatToWatch  (Backend version)  
+ 
 A movie discovery site where the TMDB API key stays safely on the **server**, not exposed in the browser.
 
-## Setup
+## Complete Setup
 
 1. Install dependencies:
    ```
