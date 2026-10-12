@@ -1,59 +1,61 @@
+<<<<<<< HEAD
 # WhatToWatch  (Backend version)  
  
 A movie discovery site where the TMDB API key stays safely on the **server**, not exposed in the browser.
 
 ## Complete Setup
+=======
+# WhatToWatch — full-stack movie recommendation clone
 
-1. Install dependencies:
-   ```
-   npm install
-   ```
+This is a from-scratch implementation inspired by the supplied WhatToWatch site. It is not the original source code.
 
-2. Create your `.env` file:
-   - Copy `.env.example` and rename the copy to `.env`
-   - Paste your TMDB API key into it:
-     ```
-     TMDB_API_KEY=your_real_key_here
-     PORT=3000
-     ```
+## Stack
+- Frontend: HTML, CSS, JavaScript
+- Backend: FastAPI
+- Movie data: TMDB API
+- Recommendation: scikit-learn TF-IDF + cosine similarity
+- Deployment: Vercel-compatible Python function
+>>>>>>> 1d1ee6c (Update NEXORmovies branding and logo)
 
-3. Start the server:
-   ```
-   npm start
-   ```
+## 1. Get a TMDB API key
+Create a TMDB account and generate an API key from the TMDB developer settings.
 
-4. Open your browser at:
-   ```
-   http://localhost:3000
-   ```
+Create `.env` from `.env.example`:git add README.md
+TMDB_API_KEY=YOUR_KEY
 
-That's it — no popup, no key typed into the browser. The frontend calls your own
-`/api/...` routes, and the server attaches the secret key when it talks to TMDB.
+For Vercel, add `TMDB_API_KEY` as an Environment Variable in the project settings.
 
-## Project structure
+## 2. Run locally
 
-```
-whattowatch-backend/
-├── server.js          # Express server, proxies TMDB requests
-├── package.json
-├── .env.example        # copy → .env and add your real key
-├── .gitignore           # keeps .env and node_modules out of git
-└── public/
-    ├── index.html
-    ├── style.css
-    └── script.js
+Windows:
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn api.index:app --reload
 ```
 
-## API routes (used by the frontend)
+Open:
+http://127.0.0.1:8000
 
-| Route | Description |
-|---|---|
-| `GET /api/feed/:feed?page=1` | `:feed` = trending, popular, top_rated, now_playing, upcoming |
-| `GET /api/search?query=...` | Search movies by title |
-| `GET /api/movie/:id` | Returns `{ details, credits, recommendations }` for one movie |
+## 3. What the recommendation does
+
+When a movie is opened, `/api/movie/{id}/tfidf`:
+1. Gets the selected movie overview from TMDB.
+2. Builds a corpus from several pages of popular movies.
+3. Converts all overviews to TF-IDF vectors.
+4. Calculates cosine similarity between the selected movie and every candidate.
+5. Returns the highest-scoring candidates.
+
+`/api/movie/{id}/genre` uses the selected movie's TMDB genre IDs to find genre matches.
+
+## 4. Vercel
+
+Push the folder to GitHub, import it into Vercel, and add:
+TMDB_API_KEY = your key
+
+The included `vercel.json` and `api/index.py` are intended for a Vercel Python deployment.
 
 ## Notes
 
-- Never commit your `.env` file — it's already in `.gitignore`.
-- If you deploy this (Render, Railway, etc.), set `TMDB_API_KEY` as an environment
-  variable in your hosting dashboard instead of uploading the `.env` file.
+The visual design and behavior are an original recreation based on the public page/screenshots. It does not claim to reproduce the site's private source code.

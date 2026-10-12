@@ -1,2 +1,25 @@
-node_modules/ 
-.env 
+# Secrets (API key yahan hai, kabhi GitHub pe nahi jani chahiye)
+.env
+
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Vercel
+.vercel/
+
+# Node (agar kabhi npm use karo)
+node_modules/
+
+# VS Code / OS files
+.vscode/
+.DS_Store
+Thumbs.db
+
+/index.html
+/app.js
+/style.css
