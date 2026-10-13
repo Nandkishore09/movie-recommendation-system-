@@ -1,95 +1,230 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>NEXORmovies — Your next favourite film</title>
-  <meta name="description" content="Choose a movie you enjoyed. NEXORmovies recommends films with a similar plot and genres.">
+
+  <meta
+    name="description"
+    content="Choose a movie you enjoyed. NEXORmovies recommends films with a similar plot and genres."
+  >
+
   <meta property="og:title" content="NEXORmovies — Your next favourite film">
-  <meta property="og:description" content="Choose a movie you enjoyed. NEXORmovies recommends films with a similar plot and genres.">
+  <meta
+    property="og:description"
+    content="Choose a movie you enjoyed. NEXORmovies recommends films with a similar plot and genres."
+  >
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-<div class="shell">
+  <div class="shell">
 
-  <aside class="side">
-    <div class="brand"><span class="mark">N</span><span class="brand-name">NEXOR<span>movies</span></span></div>
-    <nav class="side-nav" aria-label="Browse movies">
-      <button data-cat="trending" class="nav-btn active">
-        <svg class="ic" viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>Trending
-      </button>
-      <button data-cat="popular" class="nav-btn">
-        <svg class="ic" viewBox="0 0 24 24"><polygon points="12 2 15.1 8.6 22 9.3 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.3 8.9 8.6"/></svg>Popular
-      </button>
-      <button data-cat="top-rated" class="nav-btn">
-        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.2 13.5 7 22l5-3 5 3-1.2-8.5"/></svg>Top rated
-      </button>
-      <button data-cat="now-playing" class="nav-btn">
-        <svg class="ic" viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg>Now playing
-      </button>
-      <button data-cat="upcoming" class="nav-btn">
-        <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Upcoming
-      </button>
-      <button data-cat="mylist" class="nav-btn nav-list">
-        <svg class="ic" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>My list <b id="list-count">0</b>
-      </button>
-    </nav>
-  </aside>
-
-  <div class="content">
-    <header class="topbar">
-      <div class="top-brand"><span class="mark">N</span></div>
-      <div class="search-wrap">
-        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-        <input id="search" type="search" aria-label="Search movies" placeholder="Search by title, like Inception or Batman">
+    <aside class="side">
+      <div class="brand">
+        <span class="mark">N</span>
+        <span class="brand-name">NEXOR<span>movies</span></span>
       </div>
-    </header>
 
-    <main>
-      <section class="hero">
-        <div class="hero-text">
-          <h1>Your next favourite film is already here.</h1>
-          <p>Choose a movie you enjoyed. NEXORmovies recommends films with a similar plot and genres.</p>
-          <div class="hero-actions">
-            <button id="explore" class="primary">Explore trending</button>
-            <button id="surprise" class="secondary">Surprise me</button>
+      <nav class="side-nav" aria-label="Browse movies">
+
+        <button data-cat="trending" class="nav-btn active">
+          <svg class="ic" viewBox="0 0 24 24">
+            <polyline points="3 17 9 11 13 15 21 7"/>
+            <polyline points="14 7 21 7 21 14"/>
+          </svg>
+          Trending
+        </button>
+
+        <button data-cat="popular" class="nav-btn">
+          <svg class="ic" viewBox="0 0 24 24">
+            <polygon points="12 2 15.1 8.6 22 9.3 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.3 8.9 8.6"/>
+          </svg>
+          Popular
+        </button>
+
+        <button data-cat="top-rated" class="nav-btn">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="6"/>
+            <path d="M8.2 13.5 7 22l5-3 5 3-1.2-8.5"/>
+          </svg>
+          Top rated
+        </button>
+
+        <button data-cat="now-playing" class="nav-btn">
+          <svg class="ic" viewBox="0 0 24 24">
+            <polygon points="6 4 20 12 6 20"/>
+          </svg>
+          Now playing
+        </button>
+
+        <button data-cat="upcoming" class="nav-btn">
+          <svg class="ic" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Upcoming
+        </button>
+
+        <button data-cat="mylist" class="nav-btn nav-list">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>
+          </svg>
+          My list <b id="list-count">0</b>
+        </button>
+
+      </nav>
+    </aside>
+
+    <div class="content">
+
+      <header class="topbar">
+
+        <div class="top-brand">
+          <span class="mark">N</span>
+        </div>
+
+        <div class="search-wrap">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.5" y2="16.5"/>
+          </svg>
+
+          <input
+            id="search"
+            type="search"
+            aria-label="Search movies"
+            placeholder="Search by title, like Inception or Batman"
+          >
+        </div>
+
+      </header>
+
+      <main>
+
+        <section class="hero">
+
+          <div class="hero-text">
+            <h1>Your next favourite film is already here.</h1>
+
+            <p>
+              Choose a movie you enjoyed. NEXORmovies recommends films
+              with a similar plot and genres.
+            </p>
+
+            <div class="hero-actions">
+              <button id="explore" class="primary">
+                Explore trending
+              </button>
+
+              <button id="surprise" class="secondary">
+                Surprise me
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="collage" id="collage" aria-label="Trending posters">
-          <div class="cp"></div><div class="cp"></div><div class="cp"></div><div class="cp"></div>
-        </div>
-      </section>
 
-      <section class="section">
-        <div class="section-head">
-          <h2 id="section-title">Trending now</h2>
-        </div>
-        <div id="genres" class="genres" role="group" aria-label="Filter by genre"></div>
-        <div id="grid" class="grid"></div>
-        <div class="more-wrap"><button id="more" class="secondary hidden">Load more</button></div>
-      </section>
-    </main>
+          <div
+            class="collage"
+            id="collage"
+            aria-label="Trending posters"
+          >
+            <div class="cp"></div>
+            <div class="cp"></div>
+            <div class="cp"></div>
+            <div class="cp"></div>
+          </div>
 
-    <footer class="site-foot">
-      <div class="foot-main">
-        <img src="/tmdb-logo.svg" alt="TMDB" class="tmdb-logo" onerror="this.remove()">
-        <p>This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming availability data by JustWatch.</p>
-      </div>
-      <p class="foot-how"><b>How it works:</b> similar plots are found with TF-IDF text analysis on movie descriptions, and results are combined with genre matching.</p>
-    </footer>
+        </section>
+
+        <section class="section">
+
+          <div class="section-head">
+            <h2 id="section-title">Trending now</h2>
+          </div>
+
+          <div
+            id="genres"
+            class="genres"
+            role="group"
+            aria-label="Filter by genre"
+          ></div>
+
+          <div id="grid" class="grid"></div>
+
+          <div class="more-wrap">
+            <button id="more" class="secondary hidden">
+              Load more
+            </button>
+          </div>
+
+        </section>
+
+      </main>
+
+      <footer class="site-foot">
+
+        <div class="foot-main">
+          <img
+            src="./tmdb-logo.svg"
+            alt="TMDB"
+            class="tmdb-logo"
+            onerror="this.remove()"
+          >
+
+          <p>
+            This product uses the TMDB API but is not endorsed or
+            certified by TMDB. Streaming availability data by JustWatch.
+          </p>
+        </div>
+
+        <p class="foot-how">
+          <b>How it works:</b>
+          similar plots are found with TF-IDF text analysis on movie
+          descriptions, and results are combined with genre matching.
+        </p>
+
+      </footer>
+
+    </div>
   </div>
-</div>
 
-<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Movie details">
-  <div class="modal-box">
-    <button id="back" class="close" aria-label="Close">✕</button>
-    <div id="detail-content"></div>
+  <div
+    id="modal"
+    class="modal hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Movie details"
+  >
+    <div class="modal-box">
+
+      <button id="back" class="close" aria-label="Close">
+        ✕
+      </button>
+
+      <div id="detail-content"></div>
+
+    </div>
   </div>
-</div>
-<div id="toast" class="toast" role="status"></div>
-<script src="/app.js"></script>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <!-- JavaScript -->
+  <script src="./app.js"></script>
+
 </body>
 </html>
